@@ -18,6 +18,47 @@ import java.sql.PreparedStatement;
 public class PersonDAO {
     private final static Logger log = Logger.getLogger(PersonDAO.class.getName());
 
+
+    public static void updatePerson(Person person) {
+        log.log(Level.FINE, "Update person");
+
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+
+
+        try {
+            conn = DBHelper.getConnection();
+
+            String sql = "INSERT INTO person (first, last, email, phone, birthday) VALUES (?, ?, ?, ?, ?)";
+
+            stmt = conn.prepareStatement(sql);
+
+
+            stmt.setString(1, "first");
+            stmt.setString(2, "last");
+            stmt.setString(3, "email");
+            stmt.setString(4, "phone");
+            stmt.setString(5, "birthday");
+
+            stmt.executeUpdate();
+
+
+        } catch (SQLException se) {
+            log.log(Level.SEVERE, "SQL Error", se );
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error", e );
+        } finally {
+            try { stmt.close(); } catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+            try { conn.close(); } catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+        }
+
+    }
+
+
+
+
     public static List<Person> getPeople() {
         log.log(Level.FINE, "Get people");
 
