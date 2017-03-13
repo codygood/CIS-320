@@ -21,7 +21,7 @@ public class Person {
         public String getLast() {return last; }
         public void setLast(String last) {this.last = last; }
 
-        public String getEmail() {return last; }
+        public String getEmail() {return email; }
         public void setEmail(String email) {this.email = email; }
 
         public String getPhone() {return phone; }

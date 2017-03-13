@@ -8,11 +8,31 @@ $.getJSON(url, null, function(json_result) {
         for (var i = 0; i < json_result.length; i++) {
             var mystring = json_result[i].phone;
             var phone = mystring.substring(0,3) + "-" + mystring.substring(3,6) + "-" + mystring.substring(6,10);
-            $("#datatable tbody").append("<tr><td>" + json_result[i].id + "</td><td>" + json_result[i].first + "</td><td>" + json_result[i].last + "</td><td>" + json_result[i].email + "</td><td>" + phone + "</td><td>" + json_result[i].birthday + "</td></tr>");
+            $("#datatable tbody").append("<tr><td><button type='button' name='delete' class='deleteButton btn' value='" + json_result[i].id + "'>Delete</button></td><td>" + json_result[i].id + "</td><td>" + json_result[i].first + "</td><td>" + json_result[i].last + "</td><td>" + json_result[i].email + "</td><td>" + phone + "</td><td>" + json_result[i].birthday + "</td></tr>");
         }
         console.log("Done");
+        var deleteItemButton = $(".deleteButton");
+        deleteItemButton.on("click", deleteItem);
     }
 );
+
+
+function deleteItem(e) {
+    console.debug("Delete");
+    console.debug(e.target.value);
+
+        var url = "api/name_list_delete";
+        var id = e.target.value;
+        var dataToServer = { id : id };
+
+        $.post(url, dataToServer, function (dataFromServer) {
+            console.log(dataToServer);
+            console.log(dataFromServer);
+            location.reload();
+        });
+
+}
+
 
 
 function showDialogAdd() {
@@ -56,7 +76,6 @@ function showDialogAdd() {
 
 var addItemButton = $('#addItem');
 addItemButton.on("click", showDialogAdd);
-
 
 
 function saveFormChanges() {
@@ -223,7 +242,10 @@ function saveFormChanges() {
             $.post(url, dataToServer, function (dataFromServer) {
                 console.log(dataToServer);
                 console.log(dataFromServer);
+                $('#myModal').modal('hide');
+                location.reload();
             });
+
 
     } else {
         console.log("Error")

@@ -36,11 +36,42 @@ public class PersonDAO {
             stmt = conn.prepareStatement(sql);
 
 
-            stmt.setString(1, "first");
-            stmt.setString(2, "last");
-            stmt.setString(3, "email");
-            stmt.setString(4, "phone");
-            stmt.setString(5, "birthday");
+            stmt.setString(1, person.getFirst());
+            stmt.setString(2, person.getLast());
+            stmt.setString(3, person.getEmail());
+            stmt.setString(4, person.getPhone());
+            stmt.setString(5, person.getBirthday());
+
+            stmt.executeUpdate();
+
+
+        } catch (SQLException se) {
+            log.log(Level.SEVERE, "SQL Error", se );
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error", e );
+        } finally {
+            try { stmt.close(); } catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+            try { conn.close(); } catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+        }
+
+    }
+
+
+
+    public static void deletePerson(Person person) {
+        log.log(Level.FINE, "Delete person");
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = DBHelper.getConnection();
+
+            String sql = "DELETE FROM person WHERE id = ?";
+
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, person.getId());
 
             stmt.executeUpdate();
 
