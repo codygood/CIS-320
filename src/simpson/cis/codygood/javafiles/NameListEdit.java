@@ -93,22 +93,47 @@ public class NameListEdit extends HttpServlet {
         if (validation == true) {
             out.println("Success");
 
-            out.println("firstName= '"+firstName+"'");
-            out.println("lastName= '"+lastName+"'");
-            out.println("email= '"+email+"'");
-            out.println("phone= '"+phone+"'");
-            out.println("birthday= '"+birthday+"'");
+            String id = request.getParameter("id");
 
-            phone = phone.replace("-","");
+            if (id == "") {
+                out.println("firstName= '" + firstName + "'");
+                out.println("lastName= '" + lastName + "'");
+                out.println("email= '" + email + "'");
+                out.println("phone= '" + phone + "'");
+                out.println("birthday= '" + birthday + "'");
 
-            Person person = new Person();
-            person.setFirst(firstName);
-            person.setLast(lastName);
-            person.setEmail(email);
-            person.setPhone(phone);
-            person.setBirthday(birthday);
+                phone = phone.replace("-", "");
 
-            PersonDAO.updatePerson(person);
+                Person person = new Person();
+                person.setFirst(firstName);
+                person.setLast(lastName);
+                person.setEmail(email);
+                person.setPhone(phone);
+                person.setBirthday(birthday);
+
+                PersonDAO.updatePerson(person);
+            }
+
+            else {
+                out.println("id= '" + id + "'");
+                out.println("firstName= '" + firstName + "'");
+                out.println("lastName= '" + lastName + "'");
+                out.println("email= '" + email + "'");
+                out.println("phone= '" + phone + "'");
+                out.println("birthday= '" + birthday + "'");
+
+                phone = phone.replace("-", "");
+
+                Person person = new Person();
+                person.setId(Integer.parseInt(request.getParameter("id")));
+                person.setFirst(firstName);
+                person.setLast(lastName);
+                person.setEmail(email);
+                person.setPhone(phone);
+                person.setBirthday(birthday);
+
+                PersonDAO.editPerson(person);
+            }
 
         } else {
             out.println("Error");

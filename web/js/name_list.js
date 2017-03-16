@@ -8,13 +8,52 @@ $.getJSON(url, null, function(json_result) {
         for (var i = 0; i < json_result.length; i++) {
             var mystring = json_result[i].phone;
             var phone = mystring.substring(0,3) + "-" + mystring.substring(3,6) + "-" + mystring.substring(6,10);
-            $("#datatable tbody").append("<tr><td><button type='button' name='delete' class='deleteButton btn' value='" + json_result[i].id + "'>Delete</button></td><td>" + json_result[i].id + "</td><td>" + json_result[i].first + "</td><td>" + json_result[i].last + "</td><td>" + json_result[i].email + "</td><td>" + phone + "</td><td>" + json_result[i].birthday + "</td></tr>");
+            $("#datatable tbody").append("<tr><td><button type='button' name='edit' class='editButton btn' value='" + json_result[i].id + "'>Edit</button></td><td><button type='button' name='delete' class='deleteButton btn' value='" + json_result[i].id + "'>Delete</button></td><td>" + json_result[i].id + "</td><td>" + json_result[i].first + "</td><td>" + json_result[i].last + "</td><td>" + json_result[i].email + "</td><td>" + phone + "</td><td>" + json_result[i].birthday + "</td></tr>");
         }
         console.log("Done");
         var deleteItemButton = $(".deleteButton");
         deleteItemButton.on("click", deleteItem);
+        var editItemButton = $(".editButton");
+        editItemButton.on("click", editItem);
     }
 );
+
+
+function editItem(e) {
+    console.debug("Edit");
+    console.debug(e.target.value);
+
+    var id = e.target.value;
+    var firstName = e.target.parentNode.parentNode.querySelectorAll("td")[3].innerHTML;
+    var lastName = e.target.parentNode.parentNode.querySelectorAll("td")[4].innerHTML;
+    var email = e.target.parentNode.parentNode.querySelectorAll("td")[5].innerHTML;
+    var phone = e.target.parentNode.parentNode.querySelectorAll("td")[6].innerHTML;
+    var birthday = e.target.parentNode.parentNode.querySelectorAll("td")[7].innerHTML;
+
+    $('#id').val(id);
+    $('#firstName').val(firstName);
+    $('#lastName').val(lastName);
+    $('#email').val(email);
+    $('#phone').val(phone);
+    $('#birthday').val(birthday);
+
+    $('#myModal').modal('show');
+
+    var url = "api/name_list_edit";
+    var id = e.target.value;
+    var firstName = $("#firstName").val();
+    var lastName = $("#lastName").val();
+    var email = $("#email").val();
+    var phone = $("#phone").val();
+    var birthday = $("#birthday").val();
+    var dataToServer = { id : id, firstName : firstName, lastName : lastName, email : email, phone : phone, birthday : birthday};
+
+    $.post(url, dataToServer, function (dataFromServer) {
+        console.log(dataToServer);
+        console.log(dataFromServer);
+    });
+
+}
 
 
 function deleteItem(e) {
@@ -232,12 +271,13 @@ function saveFormChanges() {
         console.log("Success");
 
             var url = "api/name_list_edit";
+            var id = $("#id").val();
             var firstName = $("#firstName").val();
             var lastName = $("#lastName").val();
             var email = $("#email").val();
             var phone = $("#phone").val();
             var birthday = $("#birthday").val();
-            var dataToServer = { firstName : firstName, lastName : lastName, email : email, phone : phone, birthday : birthday };
+            var dataToServer = { id : id, firstName : firstName, lastName : lastName, email : email, phone : phone, birthday : birthday };
 
             $.post(url, dataToServer, function (dataFromServer) {
                 console.log(dataToServer);
